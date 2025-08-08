@@ -7,6 +7,8 @@ import Dashboard from "./pages/Dashboard";
 import NewLabel from "./pages/NewLabel";
 import Labels from "./pages/Labels";
 import Products from "./pages/Products";
+import Welcome from "./pages/Welcome";
+import Login from "./pages/Login";
 import Navigation from "./components/Navigation";
 import NotFound from "./pages/NotFound";
 
@@ -20,7 +22,8 @@ const App = () => (
       <BrowserRouter>
         <Navigation />
         <Routes>
-          <Route path="/" element={<Dashboard />} />
+          <Route path="/" element={<Welcome />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/nova-etiqueta" element={<NewLabel />} />
           <Route path="/etiquetas" element={<Labels />} />
           <Route path="/produtos" element={<Products />} />
