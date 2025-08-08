@@ -75,7 +75,17 @@ const Login = () => {
       }
     } catch (err: any) {
       const message = err?.message ?? "Ocorreu um erro. Tente novamente.";
-      toast({ title: "Erro", description: message, variant: "destructive" });
+      const lower = message.toLowerCase();
+      if (lower.includes("confirm")) {
+        toast({
+          title: "E-mail não confirmado",
+          description: "Verifique sua caixa de entrada e confirme seu e-mail para acessar.",
+          variant: "destructive",
+        });
+      } else {
+        toast({ title: "Erro", description: message, variant: "destructive" });
+      }
+      navigate("/login", { replace: true });
     } finally {
       setSubmitting(false);
     }

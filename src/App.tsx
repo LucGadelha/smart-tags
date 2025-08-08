@@ -7,7 +7,6 @@ import Dashboard from "./pages/Dashboard";
 import NewLabel from "./pages/NewLabel";
 import Labels from "./pages/Labels";
 import Products from "./pages/Products";
-import Welcome from "./pages/Welcome";
 import Login from "./pages/Login";
 import Navigation from "./components/Navigation";
 import NotFound from "./pages/NotFound";
@@ -26,7 +25,7 @@ const AppRoutes = () => {
         <Route path="/login" element={<Login />} />
 
         {/* Protected routes */}
-        <Route path="/" element={<ProtectedRoute><Welcome /></ProtectedRoute>} />
+        <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
         <Route path="/nova-etiqueta" element={<ProtectedRoute><NewLabel /></ProtectedRoute>} />
         <Route path="/etiquetas" element={<ProtectedRoute><Labels /></ProtectedRoute>} />
         <Route path="/produtos" element={<ProtectedRoute><Products /></ProtectedRoute>} />
