@@ -14,7 +14,7 @@ const Navigation = () => {
   ];
 
   return (
-    <nav className="bg-card border-b border-border sticky top-0 z-50 shadow-sm">
+    <nav className="bg-card border-b border-border sticky top-0 z-50 shadow-sm animate-fade-in">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center gap-2">
@@ -35,7 +35,7 @@ const Navigation = () => {
                   variant={isActive ? "default" : "ghost"}
                   size="default"
                   onClick={() => navigate(item.path)}
-                  className="flex items-center gap-2 min-w-[120px]"
+                  className="flex items-center gap-2 min-w-[44px] sm:min-w-[120px] hover-scale"
                 >
                   <Icon className="w-4 h-4" />
                   <span className="hidden sm:inline">{item.label}</span>

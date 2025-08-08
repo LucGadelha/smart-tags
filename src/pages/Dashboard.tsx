@@ -13,7 +13,7 @@ const Dashboard = () => {
     <div className="min-h-screen bg-background">
       <div className="max-w-7xl mx-auto p-4 space-y-8">
         {/* Header */}
-        <div className="text-center py-6">
+        <div className="text-center py-6 animate-fade-in">
           <h1 className="text-3xl font-bold text-foreground mb-2">
             Sistema de Controle de Alimentos
           </h1>
@@ -27,7 +27,7 @@ const Dashboard = () => {
           <h2 className="text-2xl font-semibold mb-4 text-foreground">
             Alertas de Vencimento
           </h2>
-          <div className="grid md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 animate-fade-in">
             {alerts.map((alert) => (
               <ExpirationCard 
                 key={alert.type} 
@@ -43,7 +43,7 @@ const Dashboard = () => {
           <h2 className="text-2xl font-semibold mb-4 text-foreground">
             Ações Rápidas
           </h2>
-          <div className="grid md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 animate-fade-in">
             <QuickActionCard
               title="Emitir Nova Etiqueta"
               icon={Plus}
@@ -66,7 +66,7 @@ const Dashboard = () => {
         </section>
 
         {/* Stats Summary */}
-        <section className="bg-gradient-to-r from-primary/5 to-primary-glow/5 rounded-xl p-6 border border-primary/10">
+        <section className="bg-gradient-to-r from-primary/5 to-primary-glow/5 rounded-xl p-6 border border-primary/10 animate-fade-in">
           <h2 className="text-xl font-semibold mb-4 text-foreground">
             Resumo do Sistema
           </h2>
