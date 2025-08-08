@@ -11,26 +11,41 @@ import Welcome from "./pages/Welcome";
 import Login from "./pages/Login";
 import Navigation from "./components/Navigation";
 import NotFound from "./pages/NotFound";
+import ProtectedRoute from "./components/ProtectedRoute";
+import { AuthProvider, useAuth } from "./contexts/AuthContext";
 
 const queryClient = new QueryClient();
+
+const AppRoutes = () => {
+  const { session } = useAuth();
+  return (
+    <BrowserRouter>
+      {session ? <Navigation /> : null}
+      <Routes>
+        {/* Public routes */}
+        <Route path="/login" element={<Login />} />
+
+        {/* Protected routes */}
+        <Route path="/" element={<ProtectedRoute><Welcome /></ProtectedRoute>} />
+        <Route path="/nova-etiqueta" element={<ProtectedRoute><NewLabel /></ProtectedRoute>} />
+        <Route path="/etiquetas" element={<ProtectedRoute><Labels /></ProtectedRoute>} />
+        <Route path="/produtos" element={<ProtectedRoute><Products /></ProtectedRoute>} />
+
+        {/* Catch-all */}
+        <Route path="*" element={<ProtectedRoute><NotFound /></ProtectedRoute>} />
+      </Routes>
+    </BrowserRouter>
+  );
+};
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter>
-        <Navigation />
-        <Routes>
-          <Route path="/" element={<Welcome />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/nova-etiqueta" element={<NewLabel />} />
-          <Route path="/etiquetas" element={<Labels />} />
-          <Route path="/produtos" element={<Products />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
+      <AuthProvider>
+        <AppRoutes />
+      </AuthProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );
