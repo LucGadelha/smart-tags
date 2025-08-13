@@ -6,10 +6,8 @@ import { Badge } from "@/components/ui/badge";
 import { useFoodData } from "@/hooks/useFoodData";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate, useLocation } from "react-router-dom";
-import { ArrowLeft, Search, Printer, CheckCircle, X, Filter, QrCode, Plus } from "lucide-react";
+import { ArrowLeft, Search, Printer, CheckCircle, X, Filter } from "lucide-react";
 import { FoodLabel } from "@/types/food";
-import { BarcodeScanner } from "@/components/BarcodeScanner";
-import { BatchPrintDialog } from "@/components/BatchPrintDialog";
 import {
   Select,
   SelectContent,
@@ -87,15 +85,6 @@ const Labels = () => {
     });
   };
 
-  const handleScanResult = (label: FoodLabel) => {
-    // Auto-search for the scanned label
-    setSearchTerm(label.productName);
-    toast({
-      title: "QR Code lido com sucesso!",
-      description: `Etiqueta encontrada: ${label.productName}`,
-    });
-  };
-
   const getExpirationStatus = (expirationDate: string) => {
     const now = new Date();
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
@@ -126,10 +115,9 @@ const Labels = () => {
           <h1 className="text-3xl font-bold text-foreground">Etiquetas Ativas</h1>
         </div>
 
-        {/* Filters & Actions */}
+        {/* Filters */}
         <Card>
-          <CardContent className="p-4 space-y-4">
-            {/* Search & Filter Row */}
+          <CardContent className="p-4">
             <div className="flex flex-col sm:flex-row gap-4">
               <div className="flex-1">
                 <div className="relative">
@@ -157,36 +145,6 @@ const Labels = () => {
                 </Select>
               </div>
             </div>
-
-            {/* Action Buttons Row */}
-            <div className="flex flex-col sm:flex-row gap-2">
-              <BarcodeScanner 
-                onScanResult={handleScanResult}
-                trigger={
-                  <Button variant="outline" className="flex-1 sm:flex-none">
-                    <QrCode className="w-4 h-4 mr-2" />
-                    Scanner QR
-                  </Button>
-                }
-              />
-              <BatchPrintDialog 
-                labels={filteredLabels}
-                trigger={
-                  <Button variant="outline" className="flex-1 sm:flex-none">
-                    <Printer className="w-4 h-4 mr-2" />
-                    Impressão em Lote
-                  </Button>
-                }
-              />
-              <Button 
-                onClick={() => navigate('/nova-etiqueta')} 
-                variant="default"
-                className="flex-1 sm:flex-none"
-              >
-                <Plus className="w-4 h-4 mr-2" />
-                Nova Etiqueta
-              </Button>
-            </div>
           </CardContent>
         </Card>
 
@@ -194,9 +152,11 @@ const Labels = () => {
         <div className="flex items-center justify-between">
           <p className="text-muted-foreground">
             {filteredLabels.length} etiqueta(s) encontrada(s)
-            {searchTerm && ` • Busca: "${searchTerm}"`}
-            {filterType !== 'all' && ` • Filtro: ${filterType}`}
           </p>
+          <Button onClick={() => navigate('/nova-etiqueta')} variant="kitchen">
+            <X className="w-4 h-4 mr-2" />
+            Nova Etiqueta
+          </Button>
         </div>
 
         {/* Labels Grid */}
