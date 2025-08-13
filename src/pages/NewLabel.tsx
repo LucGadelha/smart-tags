@@ -8,6 +8,7 @@ import { useFoodData } from "@/hooks/useFoodData";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 import { Printer, Save, ArrowLeft, Search } from "lucide-react";
+import { QRCodeGenerator } from "@/components/QRCodeGenerator";
 import {
   Command,
   CommandEmpty,
@@ -295,10 +296,25 @@ const NewLabel = () => {
                       )}
                     </div>
                   )}
+
+                  {/* QR Code */}
+                  <div className="border-t pt-3 mt-3">
+                    <QRCodeGenerator 
+                      label={{
+                        productName: formData.productName,
+                        productionDate: formData.productionDate,
+                        expirationDate: formData.expirationDate,
+                        quantity: formData.quantity,
+                        responsible: formData.responsible,
+                        observations: formData.observations,
+                      }}
+                      size={64}
+                    />
+                  </div>
                 </div>
               </div>
               <p className="text-xs text-muted-foreground mt-2 text-center">
-                * Tamanho real: 70mm x 40mm
+                * Tamanho real: 70mm x 40mm • Inclui QR Code
               </p>
             </CardContent>
           </Card>
