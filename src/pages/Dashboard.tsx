@@ -1,13 +1,19 @@
 import { useFoodData } from "@/hooks/useFoodData";
+import { useLabelAnalytics } from "@/hooks/useLabelAnalytics";
 import ExpirationCard from "@/components/ExpirationCard";
 import QuickActionCard from "@/components/QuickActionCard";
-import { Plus, Search, Package } from "lucide-react";
+import { StatsCard } from "@/components/analytics/StatsCard";
+import { ProductionChart } from "@/components/analytics/ProductionChart";
+import { StatusPieChart } from "@/components/analytics/StatusPieChart";
+import { TopProductsTable } from "@/components/analytics/TopProductsTable";
+import { Plus, Search, Package, TrendingUp, AlertTriangle, CheckCircle, BarChart3 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
-  const { getExpirationAlerts } = useFoodData();
+  const { getExpirationAlerts, labels } = useFoodData();
   const navigate = useNavigate();
   const alerts = getExpirationAlerts();
+  const analytics = useLabelAnalytics(labels);
 
   return (
     <div className="min-h-screen bg-background">
@@ -21,6 +27,43 @@ const Dashboard = () => {
             Controle de validade rápido e eficiente para sua cozinha
           </p>
         </div>
+
+        {/* Key Metrics */}
+        <section>
+          <h2 className="text-2xl font-semibold mb-4 text-foreground">
+            Métricas Principais
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 animate-fade-in">
+            <StatsCard
+              title="Total de Etiquetas"
+              value={analytics.stats.total}
+              subtitle="Todas as etiquetas criadas"
+              icon={BarChart3}
+              variant="default"
+            />
+            <StatsCard
+              title="Etiquetas Ativas"
+              value={analytics.stats.active}
+              subtitle={`${analytics.stats.expired} vencidas`}
+              icon={CheckCircle}
+              variant="success"
+            />
+            <StatsCard
+              title="Taxa de Utilização"
+              value={`${analytics.utilizationRate.toFixed(1)}%`}
+              subtitle="Etiquetas utilizadas"
+              icon={TrendingUp}
+              variant={analytics.utilizationRate > 80 ? 'success' : 'warning'}
+            />
+            <StatsCard
+              title="Taxa de Descarte"
+              value={`${analytics.wasteRate.toFixed(1)}%`}
+              subtitle="Produtos descartados"
+              icon={AlertTriangle}
+              variant={analytics.wasteRate > 20 ? 'destructive' : analytics.wasteRate > 10 ? 'warning' : 'success'}
+            />
+          </div>
+        </section>
 
         {/* Expiration Alerts */}
         <section>
@@ -65,36 +108,24 @@ const Dashboard = () => {
           </div>
         </section>
 
-        {/* Stats Summary */}
-        <section className="bg-gradient-to-r from-primary/5 to-primary-glow/5 rounded-xl p-6 border border-primary/10 animate-fade-in">
-          <h2 className="text-xl font-semibold mb-4 text-foreground">
-            Resumo do Sistema
+        {/* Charts and Analytics */}
+        <section>
+          <h2 className="text-2xl font-semibold mb-4 text-foreground">
+            Análise de Dados
           </h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-            <div>
-              <div className="text-2xl font-bold text-primary">
-                {alerts.reduce((acc, alert) => acc + alert.count, 0)}
-              </div>
-              <div className="text-sm text-muted-foreground">Total de Alertas</div>
-            </div>
-            <div>
-              <div className="text-2xl font-bold text-destructive">
-                {alerts.find(a => a.type === 'expired')?.count || 0}
-              </div>
-              <div className="text-sm text-muted-foreground">Vencidos</div>
-            </div>
-            <div>
-              <div className="text-2xl font-bold text-warning">
-                {alerts.find(a => a.type === 'today')?.count || 0}
-              </div>
-              <div className="text-sm text-muted-foreground">Vencem Hoje</div>
-            </div>
-            <div>
-              <div className="text-2xl font-bold text-primary">
-                {alerts.find(a => a.type === 'soon')?.count || 0}
-              </div>
-              <div className="text-sm text-muted-foreground">Próximos</div>
-            </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 animate-fade-in">
+            <ProductionChart data={analytics.dailyProduction} />
+            <StatusPieChart data={analytics.statusDistribution} />
+          </div>
+        </section>
+
+        {/* Top Products */}
+        <section>
+          <h2 className="text-2xl font-semibold mb-4 text-foreground">
+            Produtos em Destaque
+          </h2>
+          <div className="animate-fade-in">
+            <TopProductsTable data={analytics.productionTrends} />
           </div>
         </section>
       </div>
