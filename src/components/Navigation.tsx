@@ -1,7 +1,8 @@
 import { Button } from "@/components/ui/button";
-import { Home, Plus, Search, Package, Settings, Users } from "lucide-react";
+import { Home, Plus, Search, Package } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import UserMenu from "@/components/UserMenu";
 
 const Navigation = () => {
   const navigate = useNavigate();
@@ -15,13 +16,7 @@ const Navigation = () => {
     { path: '/produtos', icon: Package, label: 'Produtos' },
   ];
 
-  const adminNavItems = [
-    { path: '/usuarios', icon: Users, label: 'Usuários' },
-  ];
-
-  const navItems = userProfile?.role === 'admin' 
-    ? [...baseNavItems, ...adminNavItems] 
-    : baseNavItems;
+  const navItems = baseNavItems;
 
   return (
     <nav className="bg-card border-b border-border sticky top-0 z-50 shadow-sm animate-fade-in">
@@ -52,6 +47,8 @@ const Navigation = () => {
                 </Button>
               );
             })}
+            
+            <UserMenu />
           </div>
         </div>
       </div>
