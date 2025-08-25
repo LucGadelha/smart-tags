@@ -7,23 +7,176 @@ export type Json =
   | Json[]
 
 export type Database = {
-  // Allows to automatically instanciate createClient with right options
+  // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
     PostgrestVersion: "13.0.4"
   }
   public: {
     Tables: {
-      [_ in never]: never
+      etiquetas: {
+        Row: {
+          created_at: string
+          data_producao: string
+          data_validade: string
+          id: string
+          observacoes: string | null
+          organizacao_id: string | null
+          productName: string
+          produto_id: string | null
+          quantidade: string
+          responsavel: string | null
+          status: Database["public"]["Enums"]["label_status"]
+        }
+        Insert: {
+          created_at?: string
+          data_producao: string
+          data_validade: string
+          id?: string
+          observacoes?: string | null
+          organizacao_id?: string | null
+          productName: string
+          produto_id?: string | null
+          quantidade: string
+          responsavel?: string | null
+          status: Database["public"]["Enums"]["label_status"]
+        }
+        Update: {
+          created_at?: string
+          data_producao?: string
+          data_validade?: string
+          id?: string
+          observacoes?: string | null
+          organizacao_id?: string | null
+          productName?: string
+          produto_id?: string | null
+          quantidade?: string
+          responsavel?: string | null
+          status?: Database["public"]["Enums"]["label_status"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "etiquetas_organizacao_id_fkey"
+            columns: ["organizacao_id"]
+            isOneToOne: false
+            referencedRelation: "organizacoes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "etiquetas_produto_id_fkey"
+            columns: ["produto_id"]
+            isOneToOne: false
+            referencedRelation: "produtos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      organizacoes: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
+      produtos: {
+        Row: {
+          created_at: string
+          defaultValidityDays: number
+          department: string | null
+          id: string
+          name: string
+          organizacao_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          defaultValidityDays: number
+          department?: string | null
+          id?: string
+          name: string
+          organizacao_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          defaultValidityDays?: number
+          department?: string | null
+          id?: string
+          name?: string
+          organizacao_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "produtos_organizacao_id_fkey"
+            columns: ["organizacao_id"]
+            isOneToOne: false
+            referencedRelation: "organizacoes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          id: string
+          organizacao_id: string | null
+          pin: string | null
+          role: string
+          username: string
+        }
+        Insert: {
+          id: string
+          organizacao_id?: string | null
+          pin?: string | null
+          role: string
+          username: string
+        }
+        Update: {
+          id?: string
+          organizacao_id?: string | null
+          pin?: string | null
+          role?: string
+          username?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "profiles_organizacao_id_fkey"
+            columns: ["organizacao_id"]
+            isOneToOne: false
+            referencedRelation: "organizacoes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      authenticate_cook: {
+        Args: { pin_input: string; username_input: string }
+        Returns: {
+          organization_id: string
+          role: string
+          user_id: string
+        }[]
+      }
+      get_current_user_organization: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
     }
     Enums: {
-      [_ in never]: never
+      label_status: "Ativa" | "Utilizada" | "Descartada"
+      user_role: "admin" | "cozinheiro"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +303,9 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      label_status: ["Ativa", "Utilizada", "Descartada"],
+      user_role: ["admin", "cozinheiro"],
+    },
   },
 } as const

@@ -1,17 +1,27 @@
 import { Button } from "@/components/ui/button";
-import { Home, Plus, Search, Package, Settings } from "lucide-react";
+import { Home, Plus, Search, Package, Settings, Users } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Navigation = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { userProfile } = useAuth();
 
-  const navItems = [
+  const baseNavItems = [
     { path: '/', icon: Home, label: 'Dashboard' },
     { path: '/nova-etiqueta', icon: Plus, label: 'Nova Etiqueta' },
     { path: '/etiquetas', icon: Search, label: 'Etiquetas' },
     { path: '/produtos', icon: Package, label: 'Produtos' },
   ];
+
+  const adminNavItems = [
+    { path: '/usuarios', icon: Users, label: 'Usuários' },
+  ];
+
+  const navItems = userProfile?.role === 'admin' 
+    ? [...baseNavItems, ...adminNavItems] 
+    : baseNavItems;
 
   return (
     <nav className="bg-card border-b border-border sticky top-0 z-50 shadow-sm animate-fade-in">
