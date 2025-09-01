@@ -12,7 +12,7 @@ const Navigation = () => {
   const baseNavItems = [
     { path: '/', icon: Home, label: 'Dashboard' },
     { path: '/nova-etiqueta', icon: Plus, label: 'Nova Etiqueta' },
-    { path: '/etiquetas', icon: Search, label: 'Etiquetas' },
+    { path: '/etiquetas', icon: Search, label: 'Validade' },
     { path: '/produtos', icon: Package, label: 'Produtos' },
   ];
 
